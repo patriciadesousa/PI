@@ -1,0 +1,25 @@
+services:
+  frontend:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - GRAPHQL_API_URL=http://mock-graphql:4000
+    command: npm run dev
+    depends_on:
+      - mock-graphql
+
+  mock-graphql:
+    build: .
+    working_dir: /app
+    command: node src/mocks/mock-api.js
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "4000:4000"
